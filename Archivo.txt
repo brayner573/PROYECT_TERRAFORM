@@ -1,0 +1,2 @@
+Katherine EA
+Este es el archivo principal de nuestro proyecto.
