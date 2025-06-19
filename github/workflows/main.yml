@@ -1,0 +1,39 @@
+# sample 001
+
+# name: test actions
+
+# on:
+# push:
+# branches: [master]
+
+# jobs:
+# test-actions:
+# runs-on: ubuntu-latest
+# steps:
+# - name: Hello
+# run: echo "hello pepelepu or git actions"
+
+# sample 002
+name: test actions
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  test-actions:
+    runs-on: ubuntu-latest
+    steps:
+    # clone repository
+      - name: Clonar el repositorio
+        uses: actions/checkout@v3
+
+      # install python
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      # run script
+      - name: Ejecutar script Python
+        run: python main.py
