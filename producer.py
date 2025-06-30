@@ -17,7 +17,7 @@ if not FILE_PATH.endswith('.csv'):
 
 s3 = boto3.client("s3")
 
-# Verifica si el bucket existe
+# Verifica si el bucket existe 1
 try:
     s3.head_bucket(Bucket=INPUT_BUCKET)
     print(f"✅ Bucket '{INPUT_BUCKET}' existe.")
