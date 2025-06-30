@@ -3,6 +3,5 @@ variable "aws_region" {
 }
 
 variable "x_bucket" {
-  description = "Nombre del bucket de entrada"
-  default     = "upeu-producer-x-bucket-1"
+  default = "upeu-producer-x-bucket-1"
 }
