@@ -3,12 +3,14 @@ name: Upload CSV to S3
 on:
   push:
     paths:
-      - '*.csv'
+      - '**/*.csv'
+      - producer.py
+      - .github/workflows/main.yml
+  workflow_dispatch:
 
 jobs:
   upload:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -18,16 +20,13 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install boto3
+      - name: Install dependencies
         run: pip install boto3
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          role-to-assume: arn:aws:iam::200110254415:role/proyect-user2
-          aws-region: us-east-1
-
       - name: Run producer script
-        run: python3 producer.py prueba.csv
         env:
-          INPUT_BUCKET: upeu-producer-x-bucket-1
+          INPUT_BUCKET: ${{ secrets.INPUT_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: us-east-1
+        run: python producer.py prueba.csv
