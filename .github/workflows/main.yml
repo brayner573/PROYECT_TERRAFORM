@@ -1,24 +1,31 @@
-# sample 002
-name: test actions
+name: Producer Upload Workflow
 
 on:
   push:
-    branches: [master]
+    branches: [main]
+    paths:
+      - '**.csv'
 
 jobs:
-  test-actions:
+  upload-to-s3:
     runs-on: ubuntu-latest
+
     steps:
-    # clone repository
-      - name: Clonar el repositorio
+      - name: Checkout repo
         uses: actions/checkout@v3
 
-      # install python
-      - name: Configurar Python
-        uses: actions/setup-python@v5
+      - name: Configurar credenciales AWS
+        uses: aws-actions/configure-aws-credentials@v2
         with:
-          python-version: '3.13'
+          role-to-assume: arn:aws:iam::200110254415:role/proyect-user2
+          aws-region: us-east-1
 
-      # run script
-      - name: Ejecutar script Python
-        run: python main.py
+      - name: Instalar dependencias
+        run: pip install boto3
+
+      - name: Ejecutar producer.py si hay .csv
+        run: |
+          for file in *.csv; do
+            echo "Procesando $file"
+            python3 producer.py "$file"
+          done
