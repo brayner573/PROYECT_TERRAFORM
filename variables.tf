@@ -1,6 +1,8 @@
-
 variable "aws_region" {
-  description = "AWS region"
-  type        = string
-  default     = "us-east-1"
+  default = "us-east-1"
+}
+
+variable "x_bucket" {
+  description = "Nombre del bucket de entrada"
+  default     = "upeu-producer-x-bucket-1"
 }
