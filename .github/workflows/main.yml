@@ -1,32 +1,29 @@
-name: Producer Upload Workflow
+
+name: Upload CSV to S3
 
 on:
   push:
-    branches: [main]
     paths:
-      - '**.csv'
+      - '*.csv'
 
 jobs:
-  upload-to-s3:
+  upload:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repo
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Configurar credenciales AWS
-        uses: aws-actions/configure-aws-credentials@v2
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
-          role-to-assume: arn:aws:iam::200110254415:role/proyect-user2
-          aws-region: us-east-1
+          python-version: '3.11'
 
-      - name: Instalar dependencias
+      - name: Install boto3
         run: pip install boto3
 
-      - name: Ejecutar producer.py si hay .csv
-        run: |
-          for file in *.csv; do
-            echo "Procesando $file"
-            python3 producer.py "$file"
-          done
-#prueba
+      - name: Run producer script
+        env:
+          INPUT_BUCKET: upeu-producer-x-bucket-1
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: python producer.py prueba.csv
